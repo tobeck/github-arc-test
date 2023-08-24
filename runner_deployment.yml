@@ -1,0 +1,23 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: example-runnerdeploy
+spec:
+  template:
+    spec:
+      repository: tobeck/github-arc-test
+---
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: example-runnerdeploy-autoscaler
+spec:
+  scaleTargetRef:
+    kind: RunnerDeployment
+    name: example-runnerdeploy
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+  - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
+    repositoryNames:
+    - tobeck/github-arc-test
